@@ -56,6 +56,15 @@ body {
   overflow-x: hidden;
 }
 
+/* === Ambient light — нейтральные пятна для backdrop-filter === */
+body::after {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 50% at 10% 5%,  rgba(255,255,255,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 45% at 90% 95%, rgba(255,255,255,0.03) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 30% at 55% 45%, rgba(255,255,255,0.02) 0%, transparent 60%);
+}
 
 /* === Зерно (тихое) === */
 body::before {
