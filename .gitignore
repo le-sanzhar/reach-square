@@ -1,5 +1,7 @@
 .next
 .env*
+.agents
+.claude
 
 # Logs
 logs
