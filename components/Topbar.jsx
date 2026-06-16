@@ -18,7 +18,10 @@ export default function Topbar() {
   return (
     <div className="topbar">
       <form className="search" onSubmit={submit}>
-        <span className="glass">⌕</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" style={{ color: "var(--mut)", flexShrink: 0 }} aria-hidden="true">
+          <circle cx="5.5" cy="5.5" r="4"/>
+          <path d="M9 9L12.5 12.5"/>
+        </svg>
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -36,9 +39,9 @@ export default function Topbar() {
           <button
             className="sign-out-btn"
             onClick={() => signOut({ callbackUrl: "/login" })}
-            title="Выйти"
+            aria-label="Выйти"
           >
-            ×
+            <span aria-hidden="true">×</span>
           </button>
         </div>
       ) : (

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getDB, timeAgo } from "../../../lib/db";
 import Avatar from "../../../components/Avatar";
@@ -44,7 +45,9 @@ export default function UserPage({ params }) {
         </div>
       </div>
 
-      <div className="eyebrow">История оценок</div>
+      <div className="section-gap">
+        <div className="eyebrow">История оценок</div>
+      </div>
       {reviews.length === 0 && (
         <div className="empty">
           <div className="h2">Пока пусто</div>
@@ -54,7 +57,7 @@ export default function UserPage({ params }) {
       {reviews.map((r) => (
         <div className="feed-card" key={r.id}>
           <Link href={`/album/${r.album.id}`}>
-            <img className="feed-cover" src={r.album.cover} alt={r.album.title} />
+            <Image className="feed-cover" src={r.album.cover} alt={r.album.title} width={64} height={64} />
           </Link>
           <div className="feed-body">
             <div className="feed-line">

@@ -38,15 +38,18 @@ export default function RegisterPage() {
         <h1 className="h1">Регистрация</h1>
         <form onSubmit={submit} className="auth-form">
           <input
-            type="text" placeholder="Имя"
+            type="text" name="name" autoComplete="name"
+            placeholder="Имя" aria-label="Имя"
             value={name} onChange={(e) => setName(e.target.value)} required
           />
           <input
-            type="email" placeholder="Email"
+            type="email" name="email" autoComplete="email" spellCheck={false}
+            placeholder="Email" aria-label="Email"
             value={email} onChange={(e) => setEmail(e.target.value)} required
           />
           <input
-            type="password" placeholder="Пароль (минимум 6 символов)"
+            type="password" name="password" autoComplete="new-password"
+            placeholder="Пароль (минимум 6 символов)" aria-label="Пароль"
             value={password} onChange={(e) => setPassword(e.target.value)}
             required minLength={6}
           />

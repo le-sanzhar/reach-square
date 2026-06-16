@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getDB, albumWithStats, timeAgo } from "../lib/db";
 import Stars from "../components/Stars";
 import HeroPlay from "../components/HeroPlay";
@@ -87,7 +88,7 @@ export default function Home() {
         <div className="circle-row">
           {artists.map((ar) => (
             <Link href={`/catalog?q=${encodeURIComponent(ar.name)}`} className="artist-circle" key={ar.id}>
-              <img src={ar.cover} alt={ar.name} />
+              <Image src={ar.cover} alt={ar.name} width={100} height={100} />
               <div className="nm">{ar.name}</div>
               <div className="g">{ar.genre}</div>
             </Link>
@@ -104,11 +105,14 @@ export default function Home() {
             const artist = db.artists.find((x) => x.id === a.artistId);
             return (
               <Link href={`/album/${a.id}`} key={a.id} className="hot-card">
-                <img src={a.cover} alt={a.title} />
+                <Image src={a.cover} alt={a.title} width={300} height={300} sizes="(max-width: 760px) 45vw, 175px" />
                 <div className="meta">
                   <div className="nm">{a.title}</div>
                   <div className="a">{artist?.name}</div>
-                  <div className="r">★ {a.avgRating.toFixed(1)} · {a.reviewCount} рец.</div>
+                  <div className="r" style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                    <Stars value={a.avgRating} size={12} />
+                    <span className="muted">{a.reviewCount} рец.</span>
+                  </div>
                 </div>
               </Link>
             );
@@ -124,7 +128,7 @@ export default function Home() {
           return (
             <div className="feed-card" key={review.id}>
               <Link href={`/album/${album.id}`}>
-                <img className="feed-cover" src={album.cover} alt={album.title} />
+                <Image className="feed-cover" src={album.cover} alt={album.title} width={64} height={64} />
               </Link>
               <div className="feed-body">
                 <div className="feed-line">
@@ -159,12 +163,12 @@ export default function Home() {
             const artist = db.artists.find((x) => x.id === a.artistId);
             return (
               <Link href={`/album/${a.id}`} className="rail-item" key={a.id}>
-                <img src={a.cover} alt="" />
+                <Image src={a.cover} alt="" width={46} height={46} />
                 <div>
                   <div className="nm">{a.title}</div>
                   <div className="s">{artist?.name} · {a.year}</div>
                 </div>
-                <span className="go">›</span>
+                <span className="go" aria-hidden="true">›</span>
               </Link>
             );
           })}
@@ -188,11 +192,22 @@ export default function Home() {
         </div>
 
         <div className="rail-card">
-          <div className="rail-head"><span className="t">О платформе</span></div>
-          <p className="small muted">
-            Reach 2 — настоящий фидбек для независимой музыки.
-            Ставь оценку или пиши развёрнутую рецензию — каждое мнение важно.
-          </p>
+          <div className="rail-head"><span className="t">Статистика</span></div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div className="rail-item" style={{ padding: "4px 0" }}>
+              <div>
+                <div className="nm">{withStats.length} альбомов</div>
+                <div className="s">{db.reviews.length} рецензий · {db.users.length} критиков</div>
+              </div>
+            </div>
+          </div>
+          <Link
+            href="/catalog"
+            className="btn btn-ghost"
+            style={{ display: "block", textAlign: "center", marginTop: 12, fontSize: 12, padding: "8px 16px" }}
+          >
+            + Добавить альбом
+          </Link>
         </div>
       </aside>
     </div>

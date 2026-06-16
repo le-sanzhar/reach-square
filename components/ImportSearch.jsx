@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 export default function ImportSearch() {
   const [q, setQ] = useState("");
@@ -63,7 +64,7 @@ export default function ImportSearch() {
       />
       {results.map((r) => (
         <div className="import-result" key={r.collectionId}>
-          <img src={r.artworkUrl100} alt="" />
+          <Image src={r.artworkUrl100} alt="" width={42} height={42} />
           <div className="meta">
             <div style={{ fontWeight: 600 }}>{r.collectionName}</div>
             <div className="muted">{r.artistName} · {r.primaryGenreName}</div>

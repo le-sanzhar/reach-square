@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getDB, albumWithStats } from "../../lib/db";
 import Stars from "../../components/Stars";
 import ImportSearch from "../../components/ImportSearch";
@@ -55,12 +56,14 @@ export default function CatalogPage({ searchParams }) {
                 const artist = db.artists.find((x) => x.id === a.artistId);
                 return (
                   <Link href={`/album/${a.id}`} className="album-card" key={a.id}>
-                    <img src={a.cover} alt={a.title} />
-                    <div className="t">{a.title}</div>
-                    <div className="a">{artist?.name}</div>
-                    <div className="r">
-                      <Stars value={a.avgRating} size={12} />
-                      <span className="muted">{a.reviewCount}</span>
+                    <Image src={a.cover} alt={a.title} width={300} height={300} sizes="(max-width: 760px) 45vw, 175px" />
+                    <div className="meta">
+                      <div className="nm">{a.title}</div>
+                      <div className="a">{artist?.name}</div>
+                      <div className="r">
+                        <Stars value={a.avgRating} size={12} />
+                        <span className="muted">{a.reviewCount}</span>
+                      </div>
                     </div>
                   </Link>
                 );

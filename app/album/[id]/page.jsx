@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getDB, albumWithStats, timeAgo, wordCount } from "../../../lib/db";
 import Stars from "../../../components/Stars";
@@ -24,7 +25,7 @@ export default function AlbumPage({ params }) {
       <div className="hero">
         <div className="hero-bg" style={{ backgroundImage: `url(${album.cover})` }} />
         <div className="hero-in">
-          <img className="hero-cover" src={album.cover} alt={album.title} />
+          <Image className="hero-cover" src={album.cover} alt={album.title} width={188} height={188} priority />
           <div className="hero-meta">
             <span className="badge">{album.genre}{album.year ? ` · ${album.year}` : ""}</span>
             <h1 className="h1">{album.title}</h1>
@@ -40,7 +41,7 @@ export default function AlbumPage({ params }) {
             </div>
             <div className="ext-links">
               {album.link && (
-                <a href={album.link} target="_blank" rel="noreferrer">🎵 Открыть в Apple Music</a>
+                <a href={album.link} target="_blank" rel="noreferrer">Открыть в Apple Music ↗</a>
               )}
             </div>
           </div>

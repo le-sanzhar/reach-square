@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 function fmt(s) {
   if (!Number.isFinite(s)) return "0:00";
@@ -92,7 +93,7 @@ export default function PlayerBar() {
     <div className={`player ${track ? "" : "hidden"}`} aria-hidden={!track}>
       {track && (
         <>
-          {track.cover && <img src={track.cover} alt="" />}
+          {track.cover && <Image src={track.cover} alt="" width={48} height={48} />}
           <div className="pmeta">
             <div className="pname">{track.name}</div>
             <div className="partist">{track.artist}</div>

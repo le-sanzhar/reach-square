@@ -31,11 +31,13 @@ export default function LoginPage() {
         <h1 className="h1">Войти</h1>
         <form onSubmit={submit} className="auth-form">
           <input
-            type="email" placeholder="Email"
+            type="email" name="email" autoComplete="email" spellCheck={false}
+            placeholder="Email" aria-label="Email"
             value={email} onChange={(e) => setEmail(e.target.value)} required
           />
           <input
-            type="password" placeholder="Пароль"
+            type="password" name="password" autoComplete="current-password"
+            placeholder="Пароль" aria-label="Пароль"
             value={password} onChange={(e) => setPassword(e.target.value)} required
           />
           {error && <div className="auth-error">{error}</div>}

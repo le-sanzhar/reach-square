@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Header() {
@@ -8,20 +9,38 @@ export default function Header() {
   return (
     <aside className="sidebar">
       <Link href="/" className="logo">
-        <img src="/logo.jpg" alt="Reach 2" />
+        <Image src="/logo.jpg" alt="Reach 2" width={34} height={34} />
         <span className="wordmark">REACH<sup>2</sup></span>
       </Link>
 
-      <div className="side-label">Меню</div>
-      <nav className="nav-links">
+      <nav className="nav-links" aria-label="Основная навигация">
         <Link href="/" className={path === "/" ? "active" : ""}>
-          <span className="ico">⌂</span> Главная
+          <span className="ico">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round">
+              <path d="M1.5 7L8 1.5 14.5 7V14.5H10.5V10H5.5V14.5H1.5V7Z"/>
+            </svg>
+          </span>
+          Главная
         </Link>
         <Link href="/catalog" className={path.startsWith("/catalog") ? "active" : ""}>
-          <span className="ico">▦</span> Каталог
+          <span className="ico">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <rect x="1.5" y="1.5" width="5" height="5" rx="1.2"/>
+              <rect x="9.5" y="1.5" width="5" height="5" rx="1.2"/>
+              <rect x="1.5" y="9.5" width="5" height="5" rx="1.2"/>
+              <rect x="9.5" y="9.5" width="5" height="5" rx="1.2"/>
+            </svg>
+          </span>
+          Каталог
         </Link>
         <Link href="/profile" className={path.startsWith("/u/") || path === "/profile" ? "active" : ""}>
-          <span className="ico">◉</span> Мой профиль
+          <span className="ico">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <circle cx="8" cy="5.5" r="2.8"/>
+              <path d="M1.5 14.5c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5"/>
+            </svg>
+          </span>
+          Мой профиль
         </Link>
       </nav>
 

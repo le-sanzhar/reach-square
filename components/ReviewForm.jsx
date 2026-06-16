@@ -119,6 +119,7 @@ export default function ReviewForm({ albumId }) {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Что ты думаешь об этом альбоме? Можно коротко, можно развёрнуто — или просто поставь оценку выше."
+        aria-label="Текст рецензии"
       />
 
       {hasText && (
@@ -147,7 +148,7 @@ export default function ReviewForm({ albumId }) {
         </button>
       </div>
 
-      {toast && <div className="toast">{toast}</div>}
+      {toast && <div className="toast" role="status" aria-live="polite">{toast}</div>}
     </div>
   );
 }
