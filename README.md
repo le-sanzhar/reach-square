@@ -1,52 +1,119 @@
-# REACH 2 — The Independent Music Platform (MVP)
+# Reach² — Music Review Platform
 
-Оценка альбомов и артистов + соцсеть вокруг музыкального вкуса.
-Все альбомы, обложки, треки и 30-сек превью — **настоящие**, из публичного
-iTunes Search API (без ключей и регистрации). Стриминга полных треков нет
-намеренно — лицензии, зато официальные превью Apple играть легально.
+> Real feedback for independent music. / Настоящий фидбек для независимой музыки.
 
-## Запуск (3 команды)
+![Reach²](public/screenshot.png)
+
+---
+
+## English
+
+**Reach²** is a community-driven music review platform built for independent artists and honest listeners. Find albums, leave a quick rating or a full-length review, and follow what your friends are listening to.
+
+### Features
+
+- Curated album catalog powered by the iTunes Search API (no key required)
+- Rate albums with 1–5 stars — no word count minimum, quick ratings welcome
+- Write full reviews with prompt hints and a character progress indicator
+- Real authentication — register, login, logout with bcrypt-hashed passwords
+- Personal profile with review history and listening stats
+- Global activity feed showing what the community is rating
+- 30-second track previews via iTunes (legally licensed)
+- Auto-generated DiceBear avatars per user
+- Mobile-ready with a bottom navigation bar
+
+### Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | Next.js 14 · App Router |
+| Auth | NextAuth.js v4 · Credentials · JWT |
+| Storage | JSON flat-file `data/db.json` |
+| Music data | iTunes Search API (free, no key) |
+| Styling | Custom CSS · Liquid glass · Syne + Inter |
+| Avatars | DiceBear API |
+| Passwords | bcryptjs |
+
+### Quick Start
 
 ```bash
 npm install
-npm run seed     # парсит реальные альбомы из iTunes → data/db.json
-npm run dev      # → http://localhost:3000
+npm run seed   # pulls real albums from iTunes → data/db.json
+npm run dev    # → http://localhost:3000
 ```
 
-`npm run seed` тянет релизы Ninety One, Скриптонита, Molchat Doma, Mitski и др.
-(список в `scripts/seed.mjs` — подставь своих артистов) и генерирует к ним
-рецензии ≥ 50 слов от 8 демо-пользователей. Сами данные альбомов — реальные.
+**Demo login** (after seed):
+```
+email:    aidar@demo.reach2
+password: demo123
+```
 
-## Что есть (по PRD)
+### Environment
 
-- **Страница альбома**: обложка, жанр, год, средний рейтинг, превью треков (play),
-  рецензии, ссылки на Apple Music / поиск в Spotify
-- **Форма рецензии**: звёзды 1–5, минимум 50 слов (прогресс-бар + disabled кнопка),
-  подсказки «текст / бит / атмосфера», автосохранение черновика, валидация и на сервере
-- **Лента друзей**: хронологическая, без алгоритмов — кто что оценил и написал
-- **Горячее**: топ альбомов по рейтингу × количеству рецензий
-- **Профиль слушателя** (`/u/:id`): био, история оценок — музыкальная идентичность
-- **Страница артиста**: все релизы, агрегированный рейтинг
-- **Каталог + живой импорт**: поиск по iTunes прямо из интерфейса,
-  один клик — альбом со всеми треками в каталоге (это и есть «парсинг», серверсайд)
-- **Переключатель аккаунтов** в шапке — для демо социальности:
-  оцени с одного, переключись на другого, увидь событие в ленте
+Create `.env.local` in the project root:
 
-## Демо-сценарий для защиты (2 минуты)
+```env
+NEXTAUTH_SECRET=your-secret-here
+NEXTAUTH_URL=http://localhost:3000
+```
 
-1. Каталог → найди любого артиста → импортируй альбом в один клик (живой парсинг!)
-2. Открой альбом → включи превью трека → напиши рецензию, покажи как кнопка
-   заблокирована до 50 слов
-3. Переключи аккаунт в шапке → главная: рецензия видна в ленте от «друга»
-4. Профиль → история вкуса
+### Deployment
 
-## Стек
+Vercel won't work — the app writes to a local JSON file. Use **Railway** or **Render** (Node server) for hosting.
 
-Next.js 14 (App Router), JSON-файл вместо базы (`data/db.json`) — для MVP
-этого достаточно и видно глазами. Деплой: Vercel не подойдёт из-за записи в файл,
-для демо хватит локального запуска; если нужен хостинг — Railway/Render (node-сервер).
+---
 
-## Что намеренно out of scope
+## Русский
 
-Полный стриминг, аудио-рецензии, верификация прослушивания, монетизация,
-алгоритмическая лента — всё по PRD после PMF.
+**Reach²** — платформа для рецензий на музыку, созданная для независимых артистов и честных слушателей. Находи альбомы, ставь быстрые оценки или пиши полноценные рецензии, следи за тем, что слушает сообщество.
+
+### Возможности
+
+- Каталог альбомов через iTunes Search API (без ключей и регистрации)
+- Оценки от 1 до 5 звёзд — текст необязателен, быстрая оценка тоже считается
+- Полноценные рецензии с подсказками и индикатором прогресса
+- Настоящая авторизация — регистрация, вход, выход, пароли через bcrypt
+- Личный профиль с историей оценок и статистикой прослушиваний
+- Лента активности сообщества
+- 30-секундные превью треков через iTunes (легально)
+- Автоаватары DiceBear для каждого пользователя
+- Мобильная версия с нижней навигацией
+
+### Стек
+
+| Слой | Технология |
+|---|---|
+| Фреймворк | Next.js 14 · App Router |
+| Авторизация | NextAuth.js v4 · Credentials · JWT |
+| Хранение данных | JSON-файл `data/db.json` |
+| Музыкальные данные | iTunes Search API (бесплатно, без ключей) |
+| Стили | Custom CSS · Liquid glass · Syne + Inter |
+| Аватары | DiceBear API |
+| Пароли | bcryptjs |
+
+### Запуск
+
+```bash
+npm install
+npm run seed   # загружает реальные альбомы из iTunes → data/db.json
+npm run dev    # → http://localhost:3000
+```
+
+**Демо-вход** (после сида):
+```
+email:    aidar@demo.reach2
+пароль:   demo123
+```
+
+### Переменные окружения
+
+Создай `.env.local` в корне проекта:
+
+```env
+NEXTAUTH_SECRET=твой-секрет
+NEXTAUTH_URL=http://localhost:3000
+```
+
+### Хостинг
+
+Vercel не подойдёт — приложение пишет в локальный JSON-файл. Используй **Railway** или **Render** (Node-сервер).
