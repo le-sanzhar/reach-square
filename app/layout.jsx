@@ -2,6 +2,7 @@ import "./globals.css";
 import Header from "../components/Header";
 import Topbar from "../components/Topbar";
 import PlayerBar from "../components/PlayerBar";
+import AuthProvider from "../components/AuthProvider";
 
 export const metadata = {
   title: "Reach 2 — The Independent Music Platform",
@@ -20,14 +21,16 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <div className="app">
-          <Header />
-          <main className="main">
-            <Topbar />
-            {children}
-          </main>
-        </div>
-        <PlayerBar />
+        <AuthProvider>
+          <div className="app">
+            <Header />
+            <main className="main">
+              <Topbar />
+              {children}
+            </main>
+          </div>
+          <PlayerBar />
+        </AuthProvider>
       </body>
     </html>
   );

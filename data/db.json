@@ -6,25 +6,33 @@
       "id": "u1",
       "name": "Айдар",
       "avatar": "🎧",
-      "bio": "Ищу Q-Pop до того, как он станет мейнстримом"
+      "bio": "Ищу Q-Pop до того, как он станет мейнстримом",
+      "email": "aidar@demo.reach2",
+      "password_hash": "$2b$10$Esf2a2xCk0EnJMhVhZAAZuZY4N5emu02k5HPFR9hDjTuOS29D1cl2"
     },
     {
       "id": "u2",
       "name": "Dana",
       "avatar": "🌙",
-      "bio": "dream pop, shoegaze и всё, что звучит как туман"
+      "bio": "dream pop, shoegaze и всё, что звучит как туман",
+      "email": "dana@demo.reach2",
+      "password_hash": "$2b$10$Esf2a2xCk0EnJMhVhZAAZuZY4N5emu02k5HPFR9hDjTuOS29D1cl2"
     },
     {
       "id": "u3",
       "name": "Тимур",
       "avatar": "🔥",
-      "bio": "Хип-хоп головного мозга. Скриптонит > всё"
+      "bio": "Хип-хоп головного мозга. Скриптонит > всё",
+      "email": "timur@demo.reach2",
+      "password_hash": "$2b$10$Esf2a2xCk0EnJMhVhZAAZuZY4N5emu02k5HPFR9hDjTuOS29D1cl2"
     },
     {
       "id": "u4",
       "name": "Aliya",
       "avatar": "🌸",
-      "bio": "Слушаю инди, пишу длинные рецензии, не извиняюсь"
+      "bio": "Слушаю инди, пишу длинные рецензии, не извиняюсь",
+      "email": "aliya@demo.reach2",
+      "password_hash": "$2b$10$Esf2a2xCk0EnJMhVhZAAZuZY4N5emu02k5HPFR9hDjTuOS29D1cl2"
     }
   ],
   "reviews": []

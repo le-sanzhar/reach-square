@@ -1,27 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Topbar() {
-  const [users, setUsers] = useState([]);
-  const [me, setMe] = useState("");
+  const { data: session, status } = useSession();
   const [q, setQ] = useState("");
   const router = useRouter();
-
-  useEffect(() => {
-    fetch("/api/users")
-      .then((r) => r.json())
-      .then((list) => {
-        setUsers(list);
-        const saved = localStorage.getItem("reach2_user");
-        const id = list.some((u) => u.id === saved) ? saved : list[0]?.id || "";
-        setMe(id);
-        if (id) localStorage.setItem("reach2_user", id);
-      })
-      .catch(() => {});
-  }, []);
-
-  const current = users.find((u) => u.id === me);
 
   function submit(e) {
     e.preventDefault();
@@ -40,22 +26,23 @@ export default function Topbar() {
         />
       </form>
 
-      {users.length > 0 && (
-        <div className="user-chip" title="Демо-логин: от чьего имени ты сидишь">
-          <span className="user-avatar">{current?.avatar || "👤"}</span>
-          <select
-            value={me}
-            aria-label="Сменить пользователя"
-            onChange={(e) => {
-              setMe(e.target.value);
-              localStorage.setItem("reach2_user", e.target.value);
-              router.refresh();
-            }}
+      {status === "loading" ? (
+        <div className="user-chip"><span className="muted" style={{ fontSize: 13 }}>…</span></div>
+      ) : session ? (
+        <div className="user-chip">
+          <span className="user-avatar">{session.user.avatar || "👤"}</span>
+          <Link href={`/u/${session.user.id}`} className="user-name">{session.user.name}</Link>
+          <button
+            className="sign-out-btn"
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            title="Выйти"
           >
-            {users.map((u) => (
-              <option key={u.id} value={u.id}>{u.name}</option>
-            ))}
-          </select>
+            ×
+          </button>
+        </div>
+      ) : (
+        <div className="user-chip" style={{ padding: "6px 8px" }}>
+          <Link href="/login" className="btn" style={{ padding: "8px 20px", fontSize: 14 }}>Войти</Link>
         </div>
       )}
     </div>

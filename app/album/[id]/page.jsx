@@ -28,9 +28,7 @@ export default function AlbumPage({ params }) {
             <span className="badge">{album.genre}{album.year ? ` · ${album.year}` : ""}</span>
             <h1 className="h1">{album.title}</h1>
             {artist && (
-              <Link href={`/artist/${artist.id}`} className="muted" style={{ fontSize: 16 }}>
-                {artist.name} →
-              </Link>
+              <span className="muted" style={{ fontSize: 16 }}>{artist.name}</span>
             )}
             <div className="hero-rating">
               <span className="hero-score">{album.reviewCount ? album.avgRating.toFixed(1) : "—"}</span>
@@ -40,11 +38,9 @@ export default function AlbumPage({ params }) {
               </div>
             </div>
             <div className="ext-links">
-              {album.link && <a href={album.link} target="_blank" rel="noreferrer">🎵 Слушать в Apple Music</a>}
-              <a
-                href={`https://open.spotify.com/search/${encodeURIComponent(`${artist?.name || ""} ${album.title}`)}`}
-                target="_blank" rel="noreferrer"
-              >🟢 Найти в Spotify</a>
+              {album.link && (
+                <a href={album.link} target="_blank" rel="noreferrer">🎵 Открыть в Apple Music</a>
+              )}
             </div>
           </div>
         </div>
@@ -71,8 +67,11 @@ export default function AlbumPage({ params }) {
                   <Stars value={r.rating} size={13} />
                   <span className="review-date">{timeAgo(r.date)}</span>
                 </div>
-                <p className="review-text">{r.text}</p>
-                <div className="review-foot">♥ {r.likes} · {wordCount(r.text)} слов</div>
+                {r.text && <p className="review-text">{r.text}</p>}
+                <div className="review-foot">
+                  ♥ {r.likes}
+                  {r.text ? ` · ${wordCount(r.text)} слов` : " · только оценка"}
+                </div>
               </div>
             ))}
           </div>

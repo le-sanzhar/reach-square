@@ -1,13 +1,14 @@
 // Reach 2 — сид реальных данных из iTunes Search API (без ключей).
 // Запуск: npm run seed
 // Альбомы, обложки, жанры, треки и 30-сек превью — настоящие.
-// Пользователи и рецензии — сгенерированы (реальных рецензий легально спарсить неоткуда).
+// Пользователи и рецензии — сгенерированы.
 
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcryptjs";
 
 const TERMS = [
-  "Ninety One",          // Q-Pop — наш дифференциатор из PRD
+  "Ninety One",
   "Irina Kairatovna",
   "Скриптонит",
   "Molchat Doma",
@@ -19,18 +20,19 @@ const TERMS = [
   "Kino Виктор Цой",
 ];
 
+const DEMO_PASSWORD_HASH = await bcrypt.hash("demo123", 10);
+
 const USERS = [
-  { id: "u1", name: "Айдар", avatar: "🎧", bio: "Ищу Q-Pop до того, как он станет мейнстримом" },
-  { id: "u2", name: "Dana", avatar: "🌙", bio: "dream pop, shoegaze и всё, что звучит как туман" },
-  { id: "u3", name: "Тимур", avatar: "🔥", bio: "Хип-хоп головного мозга. Скриптонит > всё" },
-  { id: "u4", name: "Aliya", avatar: "🌸", bio: "Слушаю инди, пишу длинные рецензии, не извиняюсь" },
-  { id: "u5", name: "Марк", avatar: "🎸", bio: "Пост-панк это не жанр, это состояние" },
-  { id: "u6", name: "Sofia", avatar: "✨", bio: "Первая нашла половину твоих любимых артистов" },
-  { id: "u7", name: "Ержан", avatar: "🎹", bio: "Фонк, синтвейв и странные находки с третьей страницы поиска" },
-  { id: "u8", name: "Lena", avatar: "🖤", bio: "Если альбом короче 30 минут — уже хорошо" },
+  { id: "u1", name: "Айдар",  email: "aidar@demo.reach2",  avatar: "🎧", bio: "Ищу Q-Pop до того, как он станет мейнстримом", password_hash: DEMO_PASSWORD_HASH },
+  { id: "u2", name: "Dana",   email: "dana@demo.reach2",   avatar: "🌙", bio: "dream pop, shoegaze и всё, что звучит как туман", password_hash: DEMO_PASSWORD_HASH },
+  { id: "u3", name: "Тимур",  email: "timur@demo.reach2",  avatar: "🔥", bio: "Хип-хоп головного мозга. Скриптонит > всё", password_hash: DEMO_PASSWORD_HASH },
+  { id: "u4", name: "Aliya",  email: "aliya@demo.reach2",  avatar: "🌸", bio: "Слушаю инди, пишу длинные рецензии, не извиняюсь", password_hash: DEMO_PASSWORD_HASH },
+  { id: "u5", name: "Марк",   email: "mark@demo.reach2",   avatar: "🎸", bio: "Пост-панк это не жанр, это состояние", password_hash: DEMO_PASSWORD_HASH },
+  { id: "u6", name: "Sofia",  email: "sofia@demo.reach2",  avatar: "✨", bio: "Первая нашла половину твоих любимых артистов", password_hash: DEMO_PASSWORD_HASH },
+  { id: "u7", name: "Ержан",  email: "erzhan@demo.reach2", avatar: "🎹", bio: "Фонк, синтвейв и странные находки с третьей страницы поиска", password_hash: DEMO_PASSWORD_HASH },
+  { id: "u8", name: "Lena",   email: "lena@demo.reach2",   avatar: "🖤", bio: "Если альбом короче 30 минут — уже хорошо", password_hash: DEMO_PASSWORD_HASH },
 ];
 
-// Генератор рецензий ≥ 50 слов: собираем из фрагментов, чтобы не было близнецов.
 const OPENERS = [
   "Включил этот альбом без особых ожиданий, а в итоге переслушал три раза подряд.",
   "Это тот случай, когда обложка обещает одно, а внутри тебя ждёт совсем другое — в хорошем смысле.",
@@ -91,8 +93,6 @@ async function itunes(url) {
   return res.json();
 }
 
-// Чарты iTunes RSS — реальные топ-альбомы, наполняют каталог "под завязку".
-// genre=20 Alternative · 18 Hip-Hop/Rap · полный список кодов: жанры iTunes.
 const CHARTS = [
   ["https://itunes.apple.com/us/rss/topalbums/limit=40/json", "Top Albums US"],
   ["https://itunes.apple.com/us/rss/topalbums/genre=20/limit=25/json", "Alternative"],
@@ -103,7 +103,6 @@ async function main() {
   console.log("⏳ Тянем реальные релизы из iTunes (поиск по артистам + чарты)...");
   const ids = new Set();
 
-  // Фаза 1: твои артисты из TERMS
   for (const term of TERMS) {
     try {
       const data = await itunes(
@@ -116,7 +115,6 @@ async function main() {
     await new Promise((r) => setTimeout(r, 250));
   }
 
-  // Фаза 2: реальные чарты
   for (const [url, label] of CHARTS) {
     try {
       const data = await itunes(url);
@@ -133,7 +131,7 @@ async function main() {
     await new Promise((r) => setTimeout(r, 250));
   }
 
-  console.log(`⏳ Загружаем детали и треки для ${ids.size} альбомов (~${Math.ceil(ids.size * 0.4)} сек)...`);
+  console.log(`⏳ Загружаем детали и треки для ${ids.size} альбомов...`);
   const artists = new Map();
   const albums = [];
 
@@ -180,7 +178,7 @@ async function main() {
       tracks,
     });
     console.log(`  ✅ ${col.artistName} — ${col.collectionName} (${tracks.length} треков)`);
-    await new Promise((r) => setTimeout(r, 350)); // бережём rate limit
+    await new Promise((r) => setTimeout(r, 350));
   }
 
   if (albums.length === 0) {
@@ -188,7 +186,6 @@ async function main() {
     process.exit(1);
   }
 
-  // Рецензии: 2–4 на альбом, ≥ 50 слов, от разных пользователей
   const reviews = [];
   let rid = 1;
   for (const al of albums) {
@@ -198,7 +195,7 @@ async function main() {
         id: `r${rid++}`,
         albumId: al.id,
         userId: u.id,
-        rating: 3 + Math.floor(Math.random() * 3), // 3..5 — инди-комьюнити доброе
+        rating: 3 + Math.floor(Math.random() * 3),
         text: makeReview(),
         date: randomDateWithin(45),
         likes: Math.floor(Math.random() * 14),
@@ -219,6 +216,8 @@ async function main() {
   console.log(
     `\n🎉 Готово: ${db.artists.length} артистов, ${db.albums.length} альбомов, ${db.reviews.length} рецензий → data/db.json`
   );
+  console.log(`\n🔑 Демо-аккаунты (пароль для всех: demo123):`);
+  USERS.forEach((u) => console.log(`   ${u.email}`));
 }
 
 main();

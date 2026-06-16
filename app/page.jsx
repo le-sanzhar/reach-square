@@ -67,7 +67,7 @@ export default function Home() {
             <div className="badge">Альбом недели</div>
             <h1 className="h1">{heroAlbum.title}</h1>
             <div className="sub">
-              {heroArtist && <Link href={`/artist/${heroArtist.id}`}><b>{heroArtist.name}</b></Link>}
+              {heroArtist && <b>{heroArtist.name}</b>}
               <Stars value={heroAlbum.avgRating} />
               <span>{heroAlbum.avgRating.toFixed(1)} · {heroAlbum.reviewCount} рецензий</span>
             </div>
@@ -85,7 +85,7 @@ export default function Home() {
         </div>
         <div className="circle-row">
           {artists.map((ar) => (
-            <Link href={`/artist/${ar.id}`} className="artist-circle" key={ar.id}>
+            <Link href={`/catalog?q=${encodeURIComponent(ar.name)}`} className="artist-circle" key={ar.id}>
               <img src={ar.cover} alt={ar.name} />
               <div className="nm">{ar.name}</div>
               <div className="g">{ar.genre}</div>
@@ -187,7 +187,7 @@ export default function Home() {
           <div className="rail-head"><span className="t">О платформе</span></div>
           <p className="small muted">
             Reach 2 — настоящий фидбек для независимой музыки.
-            Минимум рецензии — 50 слов: «🔥🔥🔥» здесь не считается отзывом.
+            Ставь оценку или пиши развёрнутую рецензию — каждое мнение важно.
           </p>
         </div>
       </aside>
