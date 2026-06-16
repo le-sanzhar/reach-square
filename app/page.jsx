@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getDB, albumWithStats, timeAgo } from "../lib/db";
 import Stars from "../components/Stars";
 import HeroPlay from "../components/HeroPlay";
+import Avatar from "../components/Avatar";
 
 export const dynamic = "force-dynamic";
 
@@ -127,7 +128,10 @@ export default function Home() {
               </Link>
               <div className="feed-body">
                 <div className="feed-line">
-                  <Link href={`/u/${user.id}`}><b>{user.avatar} {user.name}</b></Link>
+                  <Link href={`/u/${user.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+                    <Avatar userId={user.id} name={user.name} size={24} />
+                    <b>{user.name}</b>
+                  </Link>
                   {" оценил(а) "}
                   <Link href={`/album/${album.id}`} className="feed-album">{album.title}</Link>
                   {artist && <span className="muted"> · {artist.name}</span>}

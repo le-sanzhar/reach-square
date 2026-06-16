@@ -3,6 +3,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Avatar from "./Avatar";
 
 export default function Topbar() {
   const { data: session, status } = useSession();
@@ -30,7 +31,7 @@ export default function Topbar() {
         <div className="user-chip"><span className="muted" style={{ fontSize: 13 }}>…</span></div>
       ) : session ? (
         <div className="user-chip">
-          <span className="user-avatar">{session.user.avatar || "👤"}</span>
+          <Avatar userId={session.user.id} name={session.user.name} size={28} />
           <Link href={`/u/${session.user.id}`} className="user-name">{session.user.name}</Link>
           <button
             className="sign-out-btn"

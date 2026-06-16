@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDB, timeAgo } from "../../../lib/db";
+import Avatar from "../../../components/Avatar";
 import Stars from "../../../components/Stars";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +27,7 @@ export default function UserPage({ params }) {
   return (
     <div>
       <div className="profile-head">
-        <div className="profile-avatar">{user.avatar}</div>
+        <div className="profile-avatar"><Avatar userId={user.id} name={user.name} size={80} /></div>
         <div>
           <h1 className="h1">{user.name}</h1>
           <p className="muted small">{user.bio}</p>

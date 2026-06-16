@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDB, albumWithStats, timeAgo, wordCount } from "../../../lib/db";
 import Stars from "../../../components/Stars";
+import Avatar from "../../../components/Avatar";
 import ReviewForm from "../../../components/ReviewForm";
 import TrackList from "../../../components/TrackList";
 
@@ -62,7 +63,7 @@ export default function AlbumPage({ params }) {
             {reviews.map((r) => (
               <div className="review" key={r.id}>
                 <div className="review-head">
-                  <span className="user-avatar">{r.user?.avatar || "👤"}</span>
+                  <Avatar userId={r.userId} name={r.user?.name} size={30} />
                   <Link href={`/u/${r.userId}`} className="review-name">{r.user?.name || "Аноним"}</Link>
                   <Stars value={r.rating} size={13} />
                   <span className="review-date">{timeAgo(r.date)}</span>
