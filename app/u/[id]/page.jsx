@@ -1,16 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../lib/auth";
 import { getDB, timeAgo } from "../../../lib/db";
 import Avatar from "../../../components/Avatar";
 import Stars from "../../../components/Stars";
+import FollowButton from "../../../components/FollowButton";
+import EditProfileForm from "../../../components/EditProfileForm";
 
 export const dynamic = "force-dynamic";
 
-export default function UserPage({ params }) {
+export default async function UserPage({ params }) {
+  const session = await getServerSession(authOptions);
   const db = getDB();
   const user = db.users.find((u) => u.id === params.id);
   if (!user) notFound();
+
+  const isMe = session?.user?.id === user.id;
+  const iFollowing = isMe ? false : (db.users.find((u) => u.id === session?.user?.id)?.following || []).includes(user.id);
+  const followers = db.users.filter((u) => (u.following || []).includes(user.id)).length;
+  const following = (user.following || []).length;
 
   const reviews = db.reviews
     .filter((r) => r.userId === user.id)
@@ -28,10 +38,20 @@ export default function UserPage({ params }) {
   return (
     <div>
       <div className="profile-head">
-        <div className="profile-avatar"><Avatar userId={user.id} name={user.name} size={80} /></div>
-        <div>
+        <div className="profile-avatar">
+          <Avatar userId={user.id} name={user.name} size={80} />
+        </div>
+        <div style={{ flex: 1 }}>
           <h1 className="h1">{user.name}</h1>
-          <p className="muted small">{user.bio}</p>
+          {user.bio && <p className="muted small" style={{ marginTop: 4 }}>{user.bio}</p>}
+          <div style={{ display: "flex", gap: 16, marginTop: 6 }}>
+            <span className="small muted"><b style={{ color: "var(--text)" }}>{following}</b> подписок</span>
+            <span className="small muted"><b style={{ color: "var(--text)" }}>{followers}</b> подписчиков</span>
+          </div>
+          {isMe
+            ? <EditProfileForm name={user.name} bio={user.bio || ""} />
+            : <FollowButton userId={user.id} initialFollowing={iFollowing} initialFollowers={followers} />
+          }
           <div className="stat-row">
             <div className="stat"><b>{reviews.length}</b><span>рецензий</span></div>
             <div className="stat"><b>{avg ? avg.toFixed(1) : "—"}</b><span>средняя оценка</span></div>
@@ -65,7 +85,10 @@ export default function UserPage({ params }) {
             </div>
             <Stars value={r.rating} />
             <div className="feed-excerpt">{r.text}</div>
-            <div className="feed-meta"><span>{timeAgo(r.date)}</span><span>♥ {r.likes}</span></div>
+            <div className="feed-meta">
+              <span>{timeAgo(r.date)}</span>
+              <span>♥ {r.likes || 0}</span>
+            </div>
           </div>
         </div>
       ))}

@@ -15,9 +15,9 @@
   --line-2:   rgba(255,255,255,0.16);
   --glow-top: rgba(255,255,255,0.18);   /* top-edge inner highlight */
 
-  --accent:    #e84545;
-  --accent-2:  #f07575;
-  --accent-bg: rgba(232,69,69,0.10);
+  --accent:    #e8b84b;
+  --accent-2:  #f5cd72;
+  --accent-bg: rgba(232,184,75,0.10);
 
   --gold:     #d4a847;
 
@@ -46,8 +46,8 @@ html { color-scheme: dark; }
 
 body {
   background:
-    radial-gradient(ellipse 75% 50% at 14% 0%,   rgba(232,69,69,0.07) 0%, transparent 62%),
-    radial-gradient(ellipse 55% 45% at 88% 105%, rgba(212,168,71,0.06) 0%, transparent 58%),
+    radial-gradient(ellipse 100% 80% at 100% 110%, rgba(212,168,71,0.30) 0%, rgba(180,130,30,0.09) 50%, transparent 70%),
+    radial-gradient(ellipse 60%  50% at 5%   0%,   rgba(180,140,50,0.10) 0%, transparent 55%),
     var(--bg);
   color: var(--text);
   font-family: var(--font);
@@ -63,7 +63,7 @@ body {
 body::before {
   content: "";
   position: fixed; inset: 0; z-index: 9999; pointer-events: none;
-  opacity: 0.022;
+  opacity: 0.032;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 128px 128px;
 }
@@ -174,7 +174,7 @@ body:has(.player.hidden) .main { padding-bottom: calc(52px + 28px); }
 .user-name { font-size: 13px; font-weight: 500; color: var(--mut-2); white-space: nowrap; transition: color .12s; }
 .user-name:hover { color: var(--text); }
 .sign-out-btn { font-size: 17px; line-height: 1; color: var(--mut); padding: 0 1px; transition: color .12s; }
-.sign-out-btn:hover { color: rgba(255,80,80,0.85); }
+.sign-out-btn:hover { color: var(--accent); }
 
 /* ============ Типографика ============ */
 .h1 {
@@ -432,7 +432,44 @@ body:has(.player.hidden) .main { padding-bottom: calc(52px + 28px); }
 .review-name:hover { color: var(--mut-2); }
 .review-date { font-size: 11.5px; color: var(--mut); margin-left: auto; }
 .review-text { margin-top: 10px; font-size: 14.5px; line-height: 1.78; color: rgba(248,248,248,0.8); }
-.review-foot { margin-top: 9px; font-size: 11.5px; color: var(--mut); }
+.review-foot { margin-top: 9px; font-size: 11.5px; color: var(--mut); display: flex; align-items: center; gap: 10px; }
+
+/* Лайк-кнопка */
+.like-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--mut); font-family: var(--font);
+  padding: 3px 8px; border-radius: 999px;
+  border: 1px solid transparent;
+  transition: color .12s, border-color .12s, background .12s;
+}
+.like-btn:hover:not(:disabled) { color: var(--accent); border-color: rgba(232,69,69,0.3); background: rgba(232,69,69,0.07); }
+.like-btn.liked { color: var(--accent); }
+.like-btn:disabled { cursor: default; }
+
+/* Удалить рецензию */
+.delete-btn { font-size: 11.5px; color: var(--mut); font-family: var(--font); padding: 2px 8px; border-radius: 6px; transition: color .12s, background .12s; }
+.delete-btn:hover { color: rgba(255,80,80,0.88); background: rgba(255,80,80,0.08); }
+.delete-confirm-btn { font-size: 11.5px; color: rgba(255,80,80,0.88); font-family: var(--font); font-weight: 600; padding: 3px 10px; border-radius: 6px; background: rgba(255,80,80,0.1); transition: background .12s; }
+.delete-confirm-btn:hover { background: rgba(255,80,80,0.2); }
+.delete-cancel-btn { font-size: 11.5px; color: var(--mut); font-family: var(--font); padding: 3px 10px; }
+
+/* Редактирование профиля */
+.edit-profile-form { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.edit-profile-form input, .edit-profile-form textarea {
+  background: rgba(255,255,255,0.04); color: var(--text);
+  border: 1px solid var(--line); border-radius: var(--r);
+  padding: 10px 13px; font-family: var(--font); font-size: 13.5px;
+  transition: border-color .14s; resize: none;
+}
+.edit-profile-form input:focus, .edit-profile-form textarea:focus { outline: none; border-color: var(--line-2); }
+
+/* Горячее за неделю */
+.hot-week { display: flex; flex-direction: column; gap: 4px; }
+.hot-week-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  border-radius: var(--r); transition: background .12s;
+}
+.hot-week-item:hover { background: var(--glass); }
 
 /* ============ Лента ============ */
 .feed-card {

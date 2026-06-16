@@ -21,6 +21,8 @@ export async function POST(req) {
     return NextResponse.json({ error: "Альбом не найден" }, { status: 404 });
   if (!Number.isInteger(rating) || rating < 1 || rating > 5)
     return NextResponse.json({ error: "Оценка должна быть от 1 до 5" }, { status: 400 });
+  if (db.reviews.some((r) => r.albumId === albumId && r.userId === userId))
+    return NextResponse.json({ error: "Ты уже оценил этот альбом" }, { status: 409 });
 
   const review = {
     id: `r${Date.now()}`,

@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <head>
-        <meta name="theme-color" content="#08080a" />
+        <meta name="theme-color" content="#06060f" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../lib/auth";
 import { getDB, albumWithStats, timeAgo } from "../lib/db";
 import Stars from "../components/Stars";
 import HeroPlay from "../components/HeroPlay";
@@ -7,7 +9,8 @@ import Avatar from "../components/Avatar";
 
 export const dynamic = "force-dynamic";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
   const db = getDB();
 
   if (db.albums.length === 0) {
@@ -50,10 +53,29 @@ export default function Home() {
     .sort((a, b) => b.avgRating * b.reviewCount - a.avgRating * a.reviewCount)
     .slice(0, 6);
 
+  // Горячее за неделю
+  const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const weekReviews = db.reviews.filter((r) => new Date(r.date).getTime() > weekAgo);
+  const weekCounts = {};
+  for (const r of weekReviews) weekCounts[r.albumId] = (weekCounts[r.albumId] || 0) + 1;
+  const hotWeek = Object.entries(weekCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([id, cnt]) => ({ album: withStats.find((a) => a.id === id), cnt }))
+    .filter((x) => x.album);
+
   // Правая панель
   const fresh = [...withStats].sort((a, b) => (b.year || 0) - (a.year || 0)).slice(0, 3);
   const top5 = [...rated].sort((a, b) => b.avgRating - a.avgRating || b.reviewCount - a.reviewCount).slice(0, 5);
-  const feed = db.reviews.slice(0, 6).map((r) => ({
+
+  // Лента: если залогинен — только подписки + своё, иначе всё
+  const myFollowing = session?.user?.id
+    ? (db.users.find((u) => u.id === session.user.id)?.following || [])
+    : [];
+  const feedReviews = db.reviews
+    .filter((r) => !session || myFollowing.length === 0 || myFollowing.includes(r.userId) || r.userId === session.user.id)
+    .slice(0, 8);
+  const feed = feedReviews.map((r) => ({
     review: r,
     user: db.users.find((u) => u.id === r.userId),
     album: db.albums.find((a) => a.id === r.albumId),
@@ -119,9 +141,34 @@ export default function Home() {
           })}
         </div>
 
+        {/* ГОРЯЧЕЕ ЗА НЕДЕЛЮ */}
+        {hotWeek.length > 0 && (
+          <>
+            <div className="row-head">
+              <h2 className="h2">Горячее за неделю</h2>
+            </div>
+            <div className="hot-week">
+              {hotWeek.map(({ album, cnt }, i) => {
+                const artist = db.artists.find((x) => x.id === album.artistId);
+                return (
+                  <Link href={`/album/${album.id}`} className="hot-week-item" key={album.id}>
+                    <span className="rank-ghost">{i + 1}</span>
+                    <Image src={album.cover} alt={album.title} width={48} height={48} style={{ borderRadius: 8, objectFit: "cover" }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{album.title}</div>
+                      <div style={{ fontSize: 12, color: "var(--mut)" }}>{artist?.name}</div>
+                    </div>
+                    <span className="badge" style={{ fontSize: 11, padding: "3px 9px", margin: 0 }}>{cnt} рец.</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </>
+        )}
+
         {/* ЛЕНТА */}
         <div className="row-head">
-          <h2 className="h2">Лента друзей</h2>
+          <h2 className="h2">{session && myFollowing.length > 0 ? "Лента подписок" : "Лента"}</h2>
         </div>
         {feed.map(({ review, user, album }) => {
           const artist = db.artists.find((a) => a.id === album.artistId);
