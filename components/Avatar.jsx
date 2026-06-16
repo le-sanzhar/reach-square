@@ -6,7 +6,7 @@ export default function Avatar({ userId, name, size = 30 }) {
       alt={name || "User"}
       width={size}
       height={size}
-      style={{ borderRadius: "50%", width: size, height: size, objectFit: "cover", flexShrink: 0 }}
+      style={{ borderRadius: "50%", width: size, height: size, objectFit: "cover", flexShrink: 0, display: "block" }}
     />
   );
 }

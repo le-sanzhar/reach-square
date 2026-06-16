@@ -1,3 +1,6 @@
+.next
+.env*
+
 # Logs
 logs
 *.log

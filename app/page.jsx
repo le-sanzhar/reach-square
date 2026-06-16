@@ -128,13 +128,13 @@ export default function Home() {
               </Link>
               <div className="feed-body">
                 <div className="feed-line">
-                  <Link href={`/u/${user.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
-                    <Avatar userId={user.id} name={user.name} size={24} />
-                    <b>{user.name}</b>
+                  <Link href={`/u/${user.id}`} className="feed-who">
+                    <Avatar userId={user.id} name={user.name} size={22} />
+                    <span>{user.name}</span>
                   </Link>
-                  {" оценил(а) "}
+                  <span className="feed-action">оценил(а)</span>
                   <Link href={`/album/${album.id}`} className="feed-album">{album.title}</Link>
-                  {artist && <span className="muted"> · {artist.name}</span>}
+                  {artist && <span className="muted">· {artist.name}</span>}
                 </div>
                 <Stars value={review.rating} />
                 <div className="feed-excerpt">{review.text}</div>
