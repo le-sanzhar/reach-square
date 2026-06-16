@@ -56,15 +56,6 @@ body {
   overflow-x: hidden;
 }
 
-/* === Ambient color blobs в фоне === */
-body::after {
-  content: "";
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 55% at 8% 0%,  rgba(109,40,217,0.22) 0%, transparent 65%),
-    radial-gradient(ellipse 55% 45% at 92% 100%, rgba(79,70,229,0.14) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 35% at 60% 50%, rgba(124,58,237,0.06) 0%, transparent 70%);
-}
 
 /* === Зерно (тихое) === */
 body::before {
