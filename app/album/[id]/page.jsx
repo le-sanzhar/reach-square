@@ -3,12 +3,11 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/auth";
-import { getDB, albumWithStats, timeAgo, wordCount } from "../../../lib/db";
+import { getDB, albumWithStats, timeAgo } from "../../../lib/db";
 import Stars from "../../../components/Stars";
-import Avatar from "../../../components/Avatar";
 import ReviewForm from "../../../components/ReviewForm";
 import TrackList from "../../../components/TrackList";
-import LikeButton from "../../../components/LikeButton";
+import ReviewList from "../../../components/ReviewList";
 import DeleteReviewButton from "../../../components/DeleteReviewButton";
 
 export const dynamic = "force-dynamic";
@@ -73,32 +72,7 @@ export default async function AlbumPage({ params }) {
           </div>
 
           <div className="section-gap">
-            <h2 className="h2" style={{ marginBottom: 6 }}>Рецензии</h2>
-            {reviews.length === 0 && (
-              <div className="empty" style={{ padding: 32 }}>
-                Пока ни одной рецензии. Стань первым — выше есть форма 👆
-              </div>
-            )}
-            {reviews.map((r) => (
-              <div className="review" key={r.id}>
-                <div className="review-head">
-                  <Avatar userId={r.userId} name={r.user?.name} size={30} />
-                  <Link href={`/u/${r.userId}`} className="review-name">{r.user?.name || "Аноним"}</Link>
-                  <Stars value={r.rating} size={13} />
-                  <span className="review-date">{timeAgo(r.date)}</span>
-                </div>
-                {r.text && <p className="review-text">{r.text}</p>}
-                <div className="review-foot">
-                  <LikeButton
-                    reviewId={r.id}
-                    initialLikes={r.likes || 0}
-                    initialLiked={(r.likedBy || []).includes(session?.user?.id || "")}
-                  />
-                  {r.text && <span>· {wordCount(r.text)} слов</span>}
-                  {!r.text && <span>· только оценка</span>}
-                </div>
-              </div>
-            ))}
+            <ReviewList reviews={reviews} />
           </div>
         </div>
 

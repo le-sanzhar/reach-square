@@ -33,6 +33,17 @@ export default function Header() {
           </span>
           Каталог
         </Link>
+        <Link href="/people" className={path.startsWith("/people") ? "active" : ""}>
+          <span className="ico">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <circle cx="5.5" cy="5" r="2.5"/>
+              <path d="M1 14c0-2.76 2.02-5 4.5-5"/>
+              <circle cx="11.5" cy="5" r="2.5"/>
+              <path d="M15 14c0-2.76-2.02-5-4.5-5"/>
+            </svg>
+          </span>
+          Слушатели
+        </Link>
         <Link href="/profile" className={path.startsWith("/u/") || path === "/profile" ? "active" : ""}>
           <span className="ico">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">

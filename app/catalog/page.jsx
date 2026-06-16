@@ -6,13 +6,16 @@ import ImportSearch from "../../components/ImportSearch";
 
 export const dynamic = "force-dynamic";
 
+const PER_PAGE = 24;
+
 export default function CatalogPage({ searchParams }) {
   const db = getDB();
   const genre = searchParams?.genre || "";
   const q = (searchParams?.q || "").toLowerCase().trim();
+  const page = Math.max(1, parseInt(searchParams?.page || "1", 10));
 
   const genres = [...new Set(db.albums.map((a) => a.genre))].sort();
-  const albums = db.albums
+  const allAlbums = db.albums
     .filter((a) => !genre || a.genre === genre)
     .filter((a) => {
       if (!q) return true;
@@ -24,6 +27,18 @@ export default function CatalogPage({ searchParams }) {
     })
     .map((a) => albumWithStats(db, a))
     .sort((a, b) => b.reviewCount - a.reviewCount);
+
+  const totalPages = Math.max(1, Math.ceil(allAlbums.length / PER_PAGE));
+  const albums = allAlbums.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  function pageUrl(p) {
+    const params = new URLSearchParams();
+    if (genre) params.set("genre", genre);
+    if (q) params.set("q", searchParams.q);
+    if (p > 1) params.set("page", p);
+    const s = params.toString();
+    return `/catalog${s ? `?${s}` : ""}`;
+  }
 
   return (
     <div>
@@ -51,24 +66,33 @@ export default function CatalogPage({ searchParams }) {
               <p>{q ? "В каталоге не нашлось — найди этот альбом в iTunes через поиск справа и добавь в один клик." : <>Запусти <code>npm run seed</code> или добавь альбом через поиск справа.</>}</p>
             </div>
           ) : (
-            <div className="grid">
-              {albums.map((a) => {
-                const artist = db.artists.find((x) => x.id === a.artistId);
-                return (
-                  <Link href={`/album/${a.id}`} className="album-card" key={a.id}>
-                    <Image src={a.cover} alt={a.title} width={300} height={300} sizes="(max-width: 760px) 45vw, 175px" />
-                    <div className="meta">
-                      <div className="nm">{a.title}</div>
-                      <div className="a">{artist?.name}</div>
-                      <div className="r">
-                        <Stars value={a.avgRating} size={12} />
-                        <span className="muted">{a.reviewCount}</span>
+            <>
+              <div className="grid">
+                {albums.map((a) => {
+                  const artist = db.artists.find((x) => x.id === a.artistId);
+                  return (
+                    <Link href={`/album/${a.id}`} className="album-card" key={a.id}>
+                      <Image src={a.cover} alt={a.title} width={300} height={300} sizes="(max-width: 760px) 45vw, 175px" />
+                      <div className="meta">
+                        <div className="nm">{a.title}</div>
+                        <div className="a">{artist?.name}</div>
+                        <div className="r">
+                          <Stars value={a.avgRating} size={12} />
+                          <span className="muted">{a.reviewCount}</span>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+                    </Link>
+                  );
+                })}
+              </div>
+              {totalPages > 1 && (
+                <div className="pagination">
+                  {page > 1 && <Link href={pageUrl(page - 1)} className="page-btn">← Назад</Link>}
+                  <span className="page-info">{page} / {totalPages}</span>
+                  {page < totalPages && <Link href={pageUrl(page + 1)} className="page-btn">Вперёд →</Link>}
+                </div>
+              )}
+            </>
           )}
         </div>
 

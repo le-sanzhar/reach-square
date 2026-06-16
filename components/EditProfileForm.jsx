@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function EditProfileForm({ name: initName, bio: initBio }) {
   const [open, setOpen] = useState(false);
@@ -9,6 +10,7 @@ export default function EditProfileForm({ name: initName, bio: initBio }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const { update } = useSession();
 
   async function save() {
     if (!name.trim()) return setError("Имя не может быть пустым");
@@ -19,8 +21,11 @@ export default function EditProfileForm({ name: initName, bio: initBio }) {
       body: JSON.stringify({ name: name.trim(), bio: bio.trim() }),
     });
     setBusy(false);
-    if (res.ok) { setOpen(false); router.refresh(); }
-    else { const d = await res.json().catch(() => ({})); setError(d.error || "Ошибка"); }
+    if (res.ok) {
+      await update({ name: name.trim() });
+      setOpen(false);
+      router.refresh();
+    } else { const d = await res.json().catch(() => ({})); setError(d.error || "Ошибка"); }
   }
 
   if (!open) return (
