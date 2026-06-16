@@ -13,14 +13,17 @@
 ### Features
 
 - Curated album catalog powered by the iTunes Search API (no key required)
-- Rate albums with 1–5 stars — no word count minimum, quick ratings welcome
-- Write full reviews with prompt hints and a character progress indicator
-- Real authentication — register, login, logout with bcrypt-hashed passwords
-- Personal profile with review history and listening stats
-- Global activity feed showing what the community is rating
+- Rate albums 1–5 stars — quick rating or full review, your choice
+- One review per user per album — edit or delete your own anytime
+- Like reviews from other listeners
+- Follow users — your feed shows only people you follow
+- "Hot this week" — top albums by review activity in the last 7 days
+- Personal profile: review history, listening stats, follower/following counts
+- Edit your name and bio inline on your profile page
 - 30-second track previews via iTunes (legally licensed)
 - Auto-generated DiceBear avatars per user
-- Mobile-ready with a bottom navigation bar
+- Real authentication — register, login, logout, bcrypt-hashed passwords
+- Mobile-ready with bottom navigation
 
 ### Stack
 
@@ -65,18 +68,21 @@ Vercel won't work — the app writes to a local JSON file. Use **Railway** or **
 
 ## Русский
 
-**Reach²** — платформа для рецензий на музыку, созданная для независимых артистов и честных слушателей. Находи альбомы, ставь быстрые оценки или пиши полноценные рецензии, следи за тем, что слушает сообщество.
+**Reach²** — платформа для рецензий на музыку, созданная для независимых артистов и честных слушателей. Находи альбомы, ставь быстрые оценки или пиши полноценные рецензии, следи за тем, что слушают подписки.
 
 ### Возможности
 
 - Каталог альбомов через iTunes Search API (без ключей и регистрации)
-- Оценки от 1 до 5 звёзд — текст необязателен, быстрая оценка тоже считается
-- Полноценные рецензии с подсказками и индикатором прогресса
-- Настоящая авторизация — регистрация, вход, выход, пароли через bcrypt
-- Личный профиль с историей оценок и статистикой прослушиваний
-- Лента активности сообщества
+- Оценки 1–5 звёзд — быстрая оценка или полноценная рецензия на выбор
+- Одна рецензия на пользователя на альбом — можно удалить и написать заново
+- Лайки на рецензиях других пользователей
+- Подписки на пользователей — лента показывает только тех, на кого подписан
+- «Горячее за неделю» — топ альбомов по активности за последние 7 дней
+- Личный профиль: история оценок, статистика, счётчики подписчиков/подписок
+- Редактирование имени и bio прямо на странице профиля
 - 30-секундные превью треков через iTunes (легально)
 - Автоаватары DiceBear для каждого пользователя
+- Настоящая авторизация — регистрация, вход, выход, пароли через bcrypt
 - Мобильная версия с нижней навигацией
 
 ### Стек
